@@ -1,35 +1,51 @@
-import React from 'react';
+import { Action } from 'history';
+import React, {useContext, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { Context } from '../store/appContext';
 
-function SingUp() {
+
+
+export const SingUp = () => { 
+  const {store, actions} = useContext(Context)
+  const {email,setEmail} = useState("");
+  const {password,setPassword} = useState("");
+  const {username,setUsername} = useState("");
+
+  const handleSubmit = () => {
+    if (email === ""  || password === "" || username === ""){
+      alert("Username/password/email empty")
+    }else{
+      actions.singup(email, password, username)
+    }
+  
+  }
+
   return (
-    <Form>
-      <Form.Group onSubmit={store.actions.setUsers()} className="mb-3" controlId="formBasicEmail">
-        <Form.Label>Username</Form.Label>
-        <Form.Control type="text" placeholder="Enter username" />
-        </Form.Group>
+    <form>
+      <div className="mb-3" controlId="formBasicEmail">
+        <label>Username</label>
+        <input type="text" placeholder="Enter username" onChange={(e) => setUsername(e.target.value)}/>
+      </div>
 
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" />
-        <Form.Text className="text-muted">
+      <div className="mb-3" controlId="formBasicEmail">
+        <label>Email address</label>
+        <input type="email" placeholder="Enter email" onChange={(e) => setEmail (e.target.value)} />
+        <p className="text-muted">
           We'll never share your email with anyone else.
-        </Form.Text>
-      </Form.Group>
+        </p>
+      </div>
 
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>Password</Form.Label>
-        <Form.Control type="password" placeholder="Password" />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <Form.Check type="checkbox" label="Check me out" />
-      </Form.Group>
+      <div className="mb-3" controlId="formBasicPassword">
+        <label>Password</label>
+        <input type="password" placeholder="Password" onChange={(e) => setPassword (e.target.value)}/>
+      </div>
+    
 
-      <Button variant="primary" type="submit">
+      <button variant="primary" type="submit" onClick={handleSubmit()}>
         Submit
-      </Button>
-    </Form>
+      </button>
+    </form>
   );
 }
 

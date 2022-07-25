@@ -2,6 +2,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
+			auth:false,
+			token:"Bienvenido",
+			email:null,
+			username:null,
 			demo: [
 				{
 					title: "FIRST",
@@ -13,14 +17,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			],	
 		},
+
 		actions: {
-			setUsers : async (username, email, password) => {
-				const resp = await fetch(`https://3001-naxinga-autenticacinjwt-v65uuj8yfuc.ws-eu54.gitpod.io/?vscodeBrowserReqId=1658671728223/token`, { 
+
+			singup : async (email, password, username) => {
+				const resp = await fetch(`https://3001-naxinga-autenticacinjwt-v65uuj8yfuc.ws-eu54.gitpod.io/?vscodeBrowserReqId=1658771551008/singup`, { 
 					 method: "POST",
 					 headers: { "Content-Type": "application/json" },
-					 body: JSON.stringify({ "username": username , "email": email , "password": password }) 
+					 body: JSON.stringify({ "email": email, "password": password, "username": username })
 				})
 		   
 				if(!resp.ok) throw Error("There was a problem in the login request")
@@ -32,24 +38,43 @@ const getState = ({ getStore, getActions, setStore }) => {
 					 throw ("Invalid email or password format")
 				}
 				const data = await resp.json()
-				// save your token in the localStorage
-			   //also you should set your user into the store using the setStore function
-				localStorage.setItem("jwt-token", data.token);
+				setStore({email:email, username:username})
+			   
+				localStorage.setItem("jwt-token", username);
+
+				setStore({token: username})
 		   
 				return data
-		   }
-			,
-			getMessage: async () => {
-				try{
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
-				}catch(error){
-					console.log("Error loading message from backend", error)
+		   },
+
+		   
+			login : async (email, password, username) => {
+				const resp = await fetch(`https://3001-naxinga-autenticacinjwt-v65uuj8yfuc.ws-eu54.gitpod.io/?vscodeBrowserReqId=1658671728223/login`, { 
+					 method: "POST",
+					 headers: { "Content-Type": "application/json" },
+					 body: JSON.stringify({ "email": email, "password": password, "username": username })
+				})
+		   
+				if(!resp.ok) throw Error("There was a problem in the login request")
+		   
+				if(resp.status === 401){
+					 throw("Invalid credentials")
 				}
+				else if(resp.status === 400){
+					 throw ("Invalid email or password format")
+				}
+				const data = await resp.json()
+				setStore({email:email, username:username})
+				setStore({auth: true})
+				localStorage.setItem("jwt-token", username);				
+				setStore({token: username})
+				return data
+		   },
+
+			logout: () => {
+				localStorage.removeItem("token")
+				setStore({auth: false})
+				setStore({email:null, username:null})
 			},
 			
 		}

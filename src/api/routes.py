@@ -8,6 +8,18 @@ from api.utils import generate_sitemap, APIException
 
 api = Blueprint('api', __name__)
 
+@api.route('/singup', methods=['POST'])
+def singup():
+    body=request.get_json()
+    comprobando = User.filter_by(email=body["email"]).first()
+    if comprobando != None:
+        return ("El email ya existe")
+    user = User(username=body["username"], email=body["email"], password=body["password"])
+    db.session.add(user)
+    db.session.commit()
+    token=create_access_token(identity=user.id)
+    return jsonify(token)
+
 @api.route('/token', methods=['POST'])
 def create_token():
     username= request.json.get("username", None)
@@ -29,3 +41,15 @@ def private():
     user = User.filter.get(current_user_id)
     
     return jsonify({"id": user.id, "username": user.username }), 200
+
+@api.route('/login', methods=['POST'])
+def login():
+    body=request.get_json()
+    comprobando = User.filter_by(email=body["email"]).first()
+    if comprobando = None:
+        return ("El usuario no existe")
+    elif 
+    db.session.add(user)
+    db.session.commit()
+    token=create_access_token(identity=user.id)
+    return jsonify(token)

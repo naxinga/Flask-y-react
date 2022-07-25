@@ -40,7 +40,7 @@ setup_admin(app)
 setup_commands(app)
 
 # Add all endpoints form the API with a "api" prefix
-app.register_blueprint(api, url_prefix='/api')
+app.register_blueprint(api, url_prefix='/')
 
 # Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
@@ -62,7 +62,6 @@ def serve_any_other_file(path):
     response = send_from_directory(static_file_dir, path)
     response.cache_control.max_age = 0 # avoid cache memory
     return response
-
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':

@@ -22,34 +22,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 		actions: {
 
-			singup : async (email, password, username) => {
-				const resp = await fetch(`https://3001-naxinga-autenticacinjwt-v65uuj8yfuc.ws-eu54.gitpod.io/?vscodeBrowserReqId=1658771551008/singup`, { 
+			singup : (email, password, username) => {
+				fetch("https://3001-naxinga-autenticacinjwt-v65uuj8yfuc.ws-eu54.gitpod.io/singup", { 
 					 method: "POST",
 					 headers: { "Content-Type": "application/json" },
-					 body: JSON.stringify({ "email": email, "password": password, "username": username })
+					 body: JSON.stringify({ email,  password,  username })
+				})
+				
+				.then (resp=>{
+					if (resp.status == 200){
+						setStore({email:email})
+						setStore({username:username})
+					}else{
+						alert("Usuario ya existe")
+						return "ERROR creando usuario"
+					}
+					return resp.json()
+				})
+				.then(data=>{
+					localStorage.setItem("jwt-token", data);
+					setStore({token: data})
 				})
 		   
-				if(!resp.ok) throw Error("There was a problem in the login request")
-		   
-				if(resp.status === 401){
-					 throw("Invalid credentials")
-				}
-				else if(resp.status === 400){
-					 throw ("Invalid email or password format")
-				}
-				const data = await resp.json()
-				setStore({email:email, username:username})
-			   
-				localStorage.setItem("jwt-token", username);
-
-				setStore({token: username})
-		   
-				return data
 		   },
 
 		   
 			login : async (email, password, username) => {
-				const resp = await fetch(`https://3001-naxinga-autenticacinjwt-v65uuj8yfuc.ws-eu54.gitpod.io/?vscodeBrowserReqId=1658671728223/login`, { 
+				const resp = await fetch("https://3001-naxinga-autenticacinjwt-v65uuj8yfuc.ws-eu54.gitpod.io/login", { 
 					 method: "POST",
 					 headers: { "Content-Type": "application/json" },
 					 body: JSON.stringify({ "email": email, "password": password, "username": username })

@@ -8,7 +8,7 @@ export const Home = () => {
 	const { store, actions } = useContext(Context);
 
 	return (
-		<div class="row">
+		<div className="row">
 			<div className="col text-center mt-5">
 					<SingUp/>
 				</div>

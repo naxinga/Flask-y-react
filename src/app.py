@@ -63,6 +63,18 @@ def serve_any_other_file(path):
     response.cache_control.max_age = 0 # avoid cache memory
     return response
 
+@app.route('/singup', methods=['POST'])
+def singup():
+    body=request.get_json()
+    comprobando = User.query.filter_by(email=body["email"]).first()
+    if comprobando != None:
+        return ("El email ya existe")
+    user = User(username=body["username"], email=body["email"], password=body["password"])
+    db.session.add(user)
+    db.session.commit()
+    token=create_access_token(identity=user.id)
+    return jsonify(token)
+
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))

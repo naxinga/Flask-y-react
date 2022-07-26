@@ -23,7 +23,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		actions: {
 
 			singup : (email, password, username) => {
-				fetch("https://3001-naxinga-autenticacinjwt-v65uuj8yfuc.ws-eu54.gitpod.io/singup", { 
+				fetch(process.env.BACKEND_URL+"/singup", { 
 					 method: "POST",
 					 headers: { "Content-Type": "application/json" },
 					 body: JSON.stringify({ email,  password,  username })
@@ -48,7 +48,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 		   
 			login : async (email, password, username) => {
-				const resp = await fetch("https://3001-naxinga-autenticacinjwt-v65uuj8yfuc.ws-eu54.gitpod.io/login", { 
+				const resp = await fetch(process.env.BACKEND_URL + "/login", { 
 					 method: "POST",
 					 headers: { "Content-Type": "application/json" },
 					 body: JSON.stringify({ "email": email, "password": password, "username": username })

@@ -39,7 +39,7 @@ export const SingUp = () => {
           if (email == ""  || password == "" || username == ""){
             alert("Username/password/email empty")
           }else{
-            actions.singup(email, password, username)
+            actions.signup(username, email, password)
           }
         }}>
         Submit

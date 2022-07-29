@@ -78,8 +78,8 @@ def login():
         raise APIException('Usuario no encontrado')
     if psw == None:
         raise APIException('PSW no encontrado')
-    print(comprobando)
-    print(psw)
+    if comprobando.password != psw.password:
+        raise APIException('Password incorrecta')
     token=create_access_token(identity=comprobando.id)
     return jsonify(token)
 

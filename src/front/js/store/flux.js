@@ -57,13 +57,13 @@ const getState = ({ getStore, getActions, setStore }) => {
             body: JSON.stringify({ username, password }),
           });
 
-          if (!resp.ok) throw Error("There was a problem in the login request");
-
           if (resp.status === 401) {
             throw "Invalid credentials";
           } else if (resp.status === 400) {
-            throw "Invalid email or password format";
+            throw "Invalid credentials";
           }
+
+          if (!resp.ok) throw Error("There was a problem in the login request");
           navigate("/private");
           const data = await resp.json();
           setStore({ username: username });
